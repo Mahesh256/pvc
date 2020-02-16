@@ -1,0 +1,26 @@
+# On Server #
+apt install nfs-kernel-server
+mkdir -p /mnt/sharedfolder
+chown nobody:nogroup /mnt/sharedfolder
+chmod 777 /mnt/sharedfolder
+vim /etc/exports
+    |
+    /mnt/sharedfolder *(rw,sync,no_root_squash)
+exportfs -r
+systemctl restart nfs-kernel-server
+
+
+# On Client #
+apt-get install nfs-common
+mount -t nfs 172.17.0.34:/mnt/sharedfolder /mnt
+df -h
+umount /mnt
+    
+    
+    (Now to see if the pv-pvc bounded successfully execute the pod and use command 'df -h')
+      e.g. kubectl exec -it wordpress-mysql-d88687df4-vnhsn bash
+              |
+              df -h
+              
+    (Get pv)
+     kubectl get pv
